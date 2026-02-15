@@ -10,12 +10,10 @@
         
         .canvas-16-9 { 
             width: 100%; max-width: 1400px; 
-            /* 移除固定 16:9，改用 min-height 自動適應平板高度 */
             min-height: 85vh; 
             background-color: #fdf5e6; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
             display: flex; flex-direction: column; align-items: center; 
             padding: 3% 3% 4% 3%; box-sizing: border-box; position: relative; 
-            /* 移除 overflow: hidden，讓按鈕永遠有空間呼吸 */
         }
         
         .header-area { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2%; }
@@ -25,10 +23,8 @@
         
         .target-hint { font-size: 24px; color: #2c3e50; background: #fff; padding: 8px 30px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; margin-bottom: 3%; }
         
-        /* 加入 flex-wrap，如果平板打直看，框框會自動上下排列 */
         .game-wrapper { display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 3vw; width: 100%; flex-grow: 1; }
         
-        /* 縮小高度，避免按鈕被擠到螢幕外面 */
         .box { width: 350px; height: 380px; background: #fff; border-radius: 20px; position: relative; box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
         .parts-pool { border: 4px dashed #d2b48c; } .drop-zone { border: 4px solid #ff9999; }
         
@@ -41,20 +37,25 @@
         .part-img:active { cursor: grabbing; transform: scale(1.05); }
         #zone .part-img { position: absolute !important; background-color: transparent; border: 3px solid transparent; padding: 0; margin: 0; }
         
-        /* 狀態列加高，留空間給大按鈕 */
         .status-area { min-height: 80px; display: flex; justify-content: center; align-items: center; gap: 2vw; margin-top: 20px; width: 100%; }
         #message { font-size: 24px; color: #ff6347; font-weight: bold; margin: 0; }
         
-        /* 按鈕放大加寬，方便手指觸控 */
         #next-btn { font-size: 24px; padding: 15px 40px; background-color: #4CAF50; color: white; border: none; border-radius: 50px; cursor: pointer; display: none; box-shadow: 0 6px 0 #388e3c; font-weight: bold; }
         #next-btn:active { transform: translateY(6px); box-shadow: none; }
         
         #zone-guide { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; color: #ecd5d5; font-weight: bold; pointer-events: none; width: 80%; text-align: center; }
         
-        /* 方向鍵微調位置 */
-        #d-pad { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); display: none; grid-template-columns: 45px 45px 45px; grid-template-rows: 45px 45px; gap: 5px; z-index: 20; background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .dir-btn { background-color: #e0f7fa; border: 2px solid #00bcd4; border-radius: 10px; font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; user-select: none; box-shadow: 0 3px 0 #00838f; }
-        .dir-btn:active { transform: translateY(3px); box-shadow: none; }
+        /* 🎮 鍵盤風格的十字方向鍵 */
+        #d-pad { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); display: none; grid-template-columns: 48px 48px 48px; grid-template-rows: 48px 48px; gap: 8px; z-index: 20; background: rgba(255, 255, 255, 0.95); padding: 12px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        
+        .dir-btn { background-color: #2c3e50; color: white; border: none; border-radius: 8px; font-size: 24px; display: flex; justify-content: center; align-items: center; cursor: pointer; user-select: none; box-shadow: 0 5px 0 #1a252f; transition: 0.1s; }
+        .dir-btn:active { transform: translateY(5px); box-shadow: none; }
+        
+        /* 🌟 把按鈕精準放回倒 T 字型的位置 */
+        #btn-up    { grid-column: 2; grid-row: 1; }
+        #btn-left  { grid-column: 1; grid-row: 2; }
+        #btn-down  { grid-column: 2; grid-row: 2; }
+        #btn-right { grid-column: 3; grid-row: 2; }
     </style>
 </head>
 <body>
@@ -68,8 +69,10 @@
             <div class="box parts-pool" id="pool" ondrop="drop(event)" ondragover="allowDrop(event)"><div class="box-title pool-title">1️⃣ 點住並拖曳</div></div>
             <div class="box drop-zone" id="zone" ondrop="drop(event)" ondragover="allowDrop(event)"><div class="box-title zone-title">2️⃣ 放到這裡組裝</div><p id="zone-guide">把部件丟進來</p>
                 <div id="d-pad">
-                    <div class="dir-btn" id="btn-up" onclick="movePart(0, -5)">⬆️</div><div class="dir-btn" id="btn-left" onclick="movePart(-5, 0)">⬅️</div>
-                    <div class="dir-btn" id="btn-down" onclick="movePart(0, 5)">⬇️</div><div class="dir-btn" id="btn-right" onclick="movePart(5, 0)">➡️</div>
+                    <div class="dir-btn" id="btn-up" onclick="movePart(0, -5)">⬆</div>
+                    <div class="dir-btn" id="btn-left" onclick="movePart(-5, 0)">⬅</div>
+                    <div class="dir-btn" id="btn-down" onclick="movePart(0, 5)">⬇</div>
+                    <div class="dir-btn" id="btn-right" onclick="movePart(5, 0)">➡</div>
                 </div>
             </div>
         </div>
