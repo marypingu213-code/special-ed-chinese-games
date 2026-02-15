@@ -105,11 +105,17 @@
             if (poolParts.length === 0 && answerParts.length > 0) checkAnswer();
         }
 
-        function createWordBlock(text, clickHandler) {
-            const wrap = document.createElement('div'); wrap.className = 'word-wrapper';
-            const sBtn = document.createElement('button'); sBtn.className = 'speak-btn'; sBtn.innerText = '🔊'; sBtn.onclick = (e) => { e.stopPropagation(); speakText(text); };
-            const wBtn = document.createElement('button'); wBtn.className = 'word-btn'; wBtn.innerText = text; wBtn.onclick = () => { speakText(text); clickHandler(); };
-            wrap.appendChild(sBtn); wrap.appendChild(wBtn); return wrap;
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                
+                // ✨ 破音字校正魔法加強版
+                let spokenText = text.replace("長的", "掌的");
+                spokenText = spokenText.replace("和 臨場反應", "河 臨場反應"); // 👈 幫第三課加上的魔法
+
+                const utterance = new SpeechSynthesisUtterance(spokenText);
+                utterance.lang = 'zh-TW'; utterance.rate = 0.85; window.speechSynthesis.speak(utterance);
+            }
         }
 
         function moveToAnswer(idx) { if (isWaiting) return; answerParts.push(poolParts.splice(idx, 1)[0]); renderZones(); }
