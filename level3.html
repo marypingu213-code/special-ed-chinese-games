@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三關：文意小偵探</title>
+    <script src="data.js"></script>
+    <style>
+        body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: #eef2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .canvas-16-9 { width: 95vw; max-width: 1400px; aspect-ratio: 16 / 9; background-color: #fdf5e6; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; padding: 3% 5%; box-sizing: border-box; overflow: hidden; }
+        .header-area { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2%; }
+        h1 { color: #2ecc71; font-size: 2.5vw; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .back-btn { background-color: #fff; color: #5a4a42; text-decoration: none; font-size: 1.5vw; font-weight: bold; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; }
+        .back-btn:hover { background-color: #f0f0f0; transform: scale(1.05); }
+        .question-container { width: 100%; background-color: #ffffff; border: 4px solid #2ecc71; border-radius: 20px; padding: 2% 4%; margin-bottom: 3%; min-height: 20%; display: flex; align-items: center; gap: 2vw; box-shadow: 0 8px 16px rgba(0,0,0,0.05); box-sizing: border-box; }
+        .question-text { font-size: 3vw; font-weight: bold; color: #2c3e50; text-align: left; line-height: 1.4; flex-grow: 1; }
+        .speak-btn { background-color: #f1c40f; border: none; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 6px 0 #f39c12; transition: 0.1s; flex-shrink: 0; }
+        .speak-btn:active { transform: translateY(6px); box-shadow: none; }
+        .main-speak { width: 6vw; height: 6vw; font-size: 3vw; } .opt-speak { width: 4.5vw; height: 4.5vw; font-size: 2.2vw; background-color: #fde3a7; box-shadow: 0 5px 0 #f39c12; } 
+        .options-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 2vw; flex-grow: 1; }
+        .option-wrapper { display: flex; align-items: stretch; gap: 1vw; }
+        .option-btn { background-color: #3498db; color: white; font-size: 2.5vw; font-weight: bold; font-family: inherit; border: none; border-radius: 15px; padding: 2% 5%; cursor: pointer; flex-grow: 1; box-shadow: 0 8px 0 #2980b9; transition: all 0.1s ease; }
+        .option-btn:active { transform: translateY(8px); box-shadow: none; }
+        .option-btn.wrong { background-color: #95a5a6; box-shadow: 0 8px 0 #7f8c8d; cursor: not-allowed; animation: shake 0.4s; }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
+        .status-area { width: 100%; height: 10%; margin-top: 2%; display: flex; justify-content: center; align-items: center; gap: 3vw; }
+        #message { font-size: 2.5vw; font-weight: bold; margin: 0; }
+        #next-btn { font-size: 2vw; padding: 1% 3%; background-color: #e74c3c; color: white; border: none; border-radius: 50px; cursor: pointer; display: none; box-shadow: 0 6px 0 #c0392b; font-weight: bold; transition: 0.2s; }
+        #next-btn:active { transform: translateY(6px); box-shadow: none; }
+        @media (min-width: 1400px) { h1 { font-size: 36px; } .back-btn { font-size: 20px; } .question-text { font-size: 42px; } .option-btn { font-size: 36px; } .main-speak { width: 80px; height: 80px; font-size: 40px; } .opt-speak { width: 60px; height: 60px; font-size: 30px; } #message { font-size: 36px; } #next-btn { font-size: 28px; } }
+    </style>
+</head>
+<body>
+    <div class="canvas-16-9">
+        <div class="header-area">
+            <h1>🕵️‍♂️ 第三關：文意小偵探</h1>
+            <a href="#" id="back-btn" class="back-btn" onclick="stopSpeech()">🏠 回課程大廳</a>
+        </div>
+        <div class="question-container">
+            <button class="speak-btn main-speak" onclick="playQuestionAudio()" title="聽題目">🔊</button>
+            <div class="question-text" id="question-display"></div>
+        </div>
+        <div class="options-grid" id="options-display"></div>
+        <div class="status-area">
+            <div id="message"></div>
+            <button id="next-btn" onclick="nextQuestion()">下一題 ➡️</button>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const lessonId = urlParams.get('id') || "2"; 
+        document.getElementById('back-btn').href = `lesson.html?id=${lessonId}`;
+        const questions = allLessonsData[lessonId] ? allLessonsData[lessonId].level3 : [];
+
+        let currentIdx = 0, isWaiting = false;
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-TW'; utterance.rate = 0.85; 
+                window.speechSynthesis.speak(utterance);
+            } 
+        }
+        function stopSpeech() { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }
+        function playQuestionAudio() { speakText(questions[currentIdx].question); }
+
+        function loadQuestion() {
+            if (currentIdx >= questions.length) {
+                document.getElementById('question-display').innerHTML = "🎉 恭喜！本關卡挑戰成功！";
+                document.querySelector('.main-speak').style.display = 'none'; document.getElementById('options-display').innerHTML = "";
+                document.getElementById('message').innerText = ""; 
+                let btn = document.getElementById('next-btn');
+                btn.innerText = '🏠 回課程大廳'; btn.style.display = 'inline-block';
+                btn.onclick = () => { window.location.href = `lesson.html?id=${lessonId}`; };
+                speakText("恭喜！任務完成！"); return;
+            }
+            const q = questions[currentIdx]; isWaiting = false;
+            document.getElementById('message').innerText = ""; 
+            
+            let btn = document.getElementById('next-btn');
+            btn.style.display = 'none'; btn.innerText = '下一題 ➡️'; btn.onclick = nextQuestion;
+
+            document.getElementById('question-display').innerText = q.question;
+            const optBox = document.getElementById('options-display'); optBox.innerHTML = "";
+            q.options.forEach(opt => {
+                const wrapper = document.createElement('div'); wrapper.className = 'option-wrapper';
+                const speakBtn = document.createElement('button'); speakBtn.className = 'speak-btn opt-speak'; speakBtn.innerText = '🔊'; speakBtn.onclick = () => speakText(opt);
+                const b = document.createElement('button'); b.className = 'option-btn'; b.innerText = opt; b.onclick = () => checkAnswer(b, opt, q.correct);
+                wrapper.appendChild(speakBtn); wrapper.appendChild(b); optBox.appendChild(wrapper);
+            });
+        }
+
+        function checkAnswer(btn, selectedOpt, correctOpt) {
+            if (isWaiting) return; stopSpeech();
+            if (selectedOpt === correctOpt) {
+                isWaiting = true;
+                document.querySelectorAll('.option-btn').forEach(b => { if (b.innerText === correctOpt) { b.style.backgroundColor = "#2ecc71"; b.style.boxShadow = "0 8px 0 #27ae60"; } else { b.style.opacity = "0.3"; } });
+                document.getElementById('message').style.color = "#2ecc71"; document.getElementById('message').innerText = "🌟 答對了！";
+                document.getElementById('next-btn').style.display = 'inline-block'; speakText("答對了！你真棒！");
+            } else {
+                btn.classList.add('wrong'); btn.disabled = true;
+                document.getElementById('message').style.color = "#e74c3c"; document.getElementById('message').innerText = "不對喔，再想想看！";
+                speakText("不對喔，再想想看！"); setTimeout(() => btn.classList.remove('wrong'), 400);
+            }
+        }
+
+        function nextQuestion() { stopSpeech(); currentIdx++; loadQuestion(); }
+        window.onunload = stopSpeech; 
+        window.onload = () => { if(questions.length===0) alert("無此關卡資料"); else loadQuestion(); };
+    </script>
+</body>
+</html>
