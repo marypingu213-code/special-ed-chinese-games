@@ -6,31 +6,55 @@
     <title>第一關：部件拼拼樂</title>
     <script src="data.js"></script>
     <style>
-        body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: #eef2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .canvas-16-9 { width: 95vw; max-width: 1400px; aspect-ratio: 16 / 9; background-color: #fdf5e6; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; padding: 2%; box-sizing: border-box; overflow: hidden; position: relative; }
-        .header-area { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1%; }
-        h1 { color: #e74c3c; font-size: 2.2vw; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
-        .back-btn { background-color: #fff; color: #5a4a42; text-decoration: none; font-size: 1.2vw; font-weight: bold; padding: 0.8vw 1.5vw; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; z-index: 50; }
+        body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: #eef2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        
+        .canvas-16-9 { 
+            width: 100%; max-width: 1400px; 
+            /* 移除固定 16:9，改用 min-height 自動適應平板高度 */
+            min-height: 85vh; 
+            background-color: #fdf5e6; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
+            display: flex; flex-direction: column; align-items: center; 
+            padding: 3% 3% 4% 3%; box-sizing: border-box; position: relative; 
+            /* 移除 overflow: hidden，讓按鈕永遠有空間呼吸 */
+        }
+        
+        .header-area { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2%; }
+        h1 { color: #e74c3c; font-size: 28px; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .back-btn { background-color: #fff; color: #5a4a42; text-decoration: none; font-size: 18px; font-weight: bold; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; z-index: 50; }
         .back-btn:hover { background-color: #f0f0f0; transform: scale(1.05); }
-        .target-hint { font-size: 2.5vw; color: #2c3e50; background: #fff; padding: 0.5vw 2vw; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; margin-bottom: 1%; }
-        .game-wrapper { display: flex; justify-content: center; align-items: flex-start; gap: 4vw; width: 100%; flex-grow: 1; }
-        .box { width: 380px; height: 460px; background: #fff; border-radius: 20px; position: relative; box-shadow: 0 8px 16px rgba(0,0,0,0.05); overflow: hidden; }
+        
+        .target-hint { font-size: 24px; color: #2c3e50; background: #fff; padding: 8px 30px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; margin-bottom: 3%; }
+        
+        /* 加入 flex-wrap，如果平板打直看，框框會自動上下排列 */
+        .game-wrapper { display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 3vw; width: 100%; flex-grow: 1; }
+        
+        /* 縮小高度，避免按鈕被擠到螢幕外面 */
+        .box { width: 350px; height: 380px; background: #fff; border-radius: 20px; position: relative; box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
         .parts-pool { border: 4px dashed #d2b48c; } .drop-zone { border: 4px solid #ff9999; }
+        
         .box-title { width: 100%; padding: 10px 0; text-align: center; font-size: 20px; font-weight: bold; position: absolute; top: 0; left: 0; z-index: 5; pointer-events: none; }
         .pool-title { background: #f4e8d8; color: #7b6855; } .zone-title { background: #ff9999; color: #fff; }
+        
         #pool { display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: center; padding-top: 60px; height: 100%; box-sizing: border-box; }
         .part-img { width: 130px; height: 130px; object-fit: contain; cursor: grab; transition: transform 0.1s ease; z-index: 10; }
         #pool .part-img { position: relative !important; left: auto !important; top: auto !important; margin: 8px; background-color: #fdfdfd; border: 2px solid #eaeaea; border-radius: 12px; }
         .part-img:active { cursor: grabbing; transform: scale(1.05); }
         #zone .part-img { position: absolute !important; background-color: transparent; border: 3px solid transparent; padding: 0; margin: 0; }
-        .status-area { height: 10%; display: flex; justify-content: center; align-items: center; gap: 2vw; }
-        #message { font-size: 2vw; color: #ff6347; font-weight: bold; margin: 0; }
-        #next-btn { font-size: 1.8vw; padding: 0.8vw 2vw; background-color: #4CAF50; color: white; border: none; border-radius: 50px; cursor: pointer; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.2); font-weight: bold; }
+        
+        /* 狀態列加高，留空間給大按鈕 */
+        .status-area { min-height: 80px; display: flex; justify-content: center; align-items: center; gap: 2vw; margin-top: 20px; width: 100%; }
+        #message { font-size: 24px; color: #ff6347; font-weight: bold; margin: 0; }
+        
+        /* 按鈕放大加寬，方便手指觸控 */
+        #next-btn { font-size: 24px; padding: 15px 40px; background-color: #4CAF50; color: white; border: none; border-radius: 50px; cursor: pointer; display: none; box-shadow: 0 6px 0 #388e3c; font-weight: bold; }
+        #next-btn:active { transform: translateY(6px); box-shadow: none; }
+        
         #zone-guide { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; color: #ecd5d5; font-weight: bold; pointer-events: none; width: 80%; text-align: center; }
-        #d-pad { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: none; grid-template-columns: 50px 50px 50px; grid-template-rows: 50px 50px; gap: 5px; z-index: 20; background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .dir-btn { background-color: #e0f7fa; border: 2px solid #00bcd4; border-radius: 10px; font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; user-select: none; box-shadow: 0 2px 0 #00838f; }
-        .dir-btn:active { transform: translateY(2px); box-shadow: none; }
-        #btn-up { grid-column: 2; grid-row: 1; } #btn-left { grid-column: 1; grid-row: 2; } #btn-down { grid-column: 2; grid-row: 2; } #btn-right { grid-column: 3; grid-row: 2; }
+        
+        /* 方向鍵微調位置 */
+        #d-pad { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); display: none; grid-template-columns: 45px 45px 45px; grid-template-rows: 45px 45px; gap: 5px; z-index: 20; background: rgba(255, 255, 255, 0.9); padding: 8px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .dir-btn { background-color: #e0f7fa; border: 2px solid #00bcd4; border-radius: 10px; font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; user-select: none; box-shadow: 0 3px 0 #00838f; }
+        .dir-btn:active { transform: translateY(3px); box-shadow: none; }
     </style>
 </head>
 <body>
@@ -53,9 +77,8 @@
     </div>
 
     <script>
-        // 🌟 讀取網址與資料庫
         const urlParams = new URLSearchParams(window.location.search);
-        const lessonId = urlParams.get('id') || "2"; 
+        const lessonId = urlParams.get('id') || "1"; 
         document.getElementById('back-btn').href = `lesson.html?id=${lessonId}`;
         const wordData = allLessonsData[lessonId] ? allLessonsData[lessonId].level1 : [];
 
