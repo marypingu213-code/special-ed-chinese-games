@@ -1,8 +1,6 @@
 const allLessonsData = {
-    // ================= 第一課 =================
     "1": {
-        title: "第一課：學騎腳踏車",
-        
+        title: "第一課：風中騎士",
         level1: [
             { word: "海", parts: ["images/L1/筆順-海-部件-1.png", "images/L1/筆順-海-部件-2.png"], pos: [{x: 120, y: 180}, {x: 160, y: 180}] },
             { word: "悔", parts: ["images/L1/筆順-悔-部件-1.png", "images/L1/筆順-悔-部件-2.png"], pos: [{x: 130, y: 180}, {x: 160, y: 180}] },
@@ -14,7 +12,6 @@ const allLessonsData = {
             { word: "痛", parts: ["images/L1/筆順-痛-部件-1.png", "images/L1/筆順-痛-部件-2.png"], pos: [{x: 100, y: 120}, {x: 125, y: 135}] },
             { word: "廟", parts: ["images/L1/筆順-廟-部件-1.png", "images/L1/筆順-廟-部件-2.png", "images/L1/筆順-廟-部件-3.png"], pos: [{x: 85, y: 110}, {x: 130, y: 125}, {x: 185, y: 125}] }
         ],
-        
         level2: [
             { prefix: "傷", suffix: "", correct: "疤", options: ["疤", "巴", "痛"], image: "", emoji: "🤕" },
             { prefix: "大", suffix: "", correct: "海", options: ["海", "每", "梅"], image: "", emoji: "🌊" },
@@ -22,7 +19,6 @@ const allLessonsData = {
             { prefix: "跌", suffix: "", correct: "跤", options: ["跤", "交", "校"], image: "", emoji: "🏃‍♂️" },
             { prefix: "寺", suffix: "", correct: "廟", options: ["廟", "朝", "明"], image: "", emoji: "⛩️" }
         ],
-        
         level3: [
             { question: "1. 如果一件事情讓你非常不能相信，你會選擇下面哪個四字語詞？", options: ["難以置信", "搖搖晃晃", "左鄰右舍", "打退堂鼓"], correct: "難以置信" },
             { question: "2. 請問在這課課文中，擔任教練的是？", options: ["爸爸", "媽媽", "堂姐", "表姐"], correct: "爸爸" },
@@ -30,7 +26,6 @@ const allLessonsData = {
             { question: "4. 為了跌倒不要太痛，作者做了什麼事情？", options: ["放棄騎單車", "給同學載", "穿了兩件長褲", "穿了兩件衣服"], correct: "穿了兩件長褲" },
             { question: "5. 為什麼作者最後會摔倒呢？", options: ["因為不會騎車", "因為放開雙手騎車", "因為騎得很快", "因為不知道怎麼煞車"], correct: "因為不知道怎麼煞車" }
         ],
-        
         level4: [
             "我 一定 不讓你 摔下來。",
             "你 真厲害，我 試著 放開手，你 自己騎。",
@@ -39,12 +34,9 @@ const allLessonsData = {
             "膽大的 騎士 還會 放開雙手。",
             "我 小心地 跨了上去，邁出 騎士的 一大步。"
         ]
-    }, // 💡 就是這個第一課跟第二課中間的逗號，最容易不小心被刪掉！
-
-    // ================= 第二課 =================
+    },
     "2": {
-        title: "第二課：布農族與黑熊",
-        
+        title: "第二課：達駭黑熊",
         level1: [
             { word: "寮", parts: ["images/L2/筆順-寮-部件-1.png", "images/L2/筆順-寮-部件-2.png"], pos: [{x: 120, y: 110}, {x: 120, y: 160}] },
             { word: "療", parts: ["images/L2/筆順-療-部件-1.png", "images/L2/筆順-療-部件-2.png"], pos: [{x: 100, y: 120}, {x: 130, y: 150}] },
@@ -58,7 +50,6 @@ const allLessonsData = {
             { word: "淹", parts: ["images/L2/筆順-淹-部件-1.png", "images/L2/筆順-淹-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
             { word: "煙", parts: ["images/L2/筆順-煙-部件-1.png", "images/L2/筆順-煙-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] }
         ],
-        
         level2: [
             { prefix: "工", suffix: "", correct: "寮", options: ["寮", "療", "聊"], image: "", emoji: "🛖" },
             { prefix: "", suffix: "天", correct: "聊", options: ["聊", "寮", "療"], image: "", emoji: "🗣️" },
@@ -71,8 +62,20 @@ const allLessonsData = {
             { prefix: "", suffix: "水", correct: "淹", options: ["淹", "煙", "奄"], image: "", emoji: "🌊" },
             { prefix: "", suffix: "火", correct: "煙", options: ["煙", "淹", "奄"], image: "", emoji: "🎆" }
         ],
-        
         level3: [
             { question: "1. 請問在這課課文中，爺爺的臉上有什麼？", options: ["鬍子", "青春痘", "傷疤", "痣"], correct: "傷疤" },
             { question: "2. 我們可以從什麼地方知道動物的種類？", options: ["地點", "糞便", "味道", "時間"], correct: "糞便" },
-            { question: "3. 爺爺用鍋子接了什麼當晚餐？", options: ["雨水", "雪水", "
+            { question: "3. 爺爺用鍋子接了什麼當晚餐？", options: ["雨水", "雪水", "自來水", "開水"], correct: "雪水" },
+            { question: "4. 布農族有一個不可以做的事情是？", options: ["殺野兔", "殺梅花鹿", "殺野豬", "殺黑熊"], correct: "殺黑熊" },
+            { question: "5. 什麼時候我們會使用「風雨交加」這個語詞？", options: ["晴天的時候", "下毛毛雨的時候", "颱風天的時候", "看的到星星的時候"], correct: "颱風天的時候" },
+            { question: "6. 在這課課文中，最棒的收穫是什麼？", options: ["幫助了黑熊", "抓到兩隻黑熊", "吃到了黑熊肉", "把黑熊帶回村莊"], correct: "幫助了黑熊" }
+        ],
+        level4: [
+            "我的爺爺長的 黑黑壯壯，臉上有一條 長長的傷疤。",
+            "滿天的 星星 多到眼睛 都裝不下。",
+            "這是 獵寮，獵人 在森林裡的家。",
+            "我 可以 感受爺爺的 自責與懊悔。",
+            "聲音 時高時低，傳遍 整個山林。"
+        ]
+    }
+};
