@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第四關：句子排排站</title>
+    <script src="data.js"></script>
+    <style>
+        body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: #eef2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .canvas-16-9 { width: 95vw; max-width: 1400px; aspect-ratio: 16 / 9; background-color: #fdf5e6; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; padding: 2% 4%; box-sizing: border-box; overflow: hidden; }
+        .header-area { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2%; }
+        h1 { color: #f39c12; font-size: 2.5vw; margin: 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .back-btn { background-color: #fff; color: #5a4a42; text-decoration: none; font-size: 1.5vw; font-weight: bold; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; }
+        .back-btn:hover { background-color: #f0f0f0; transform: scale(1.05); }
+        .hint-area { width: 100%; display: flex; justify-content: flex-start; margin-bottom: 2%; }
+        .hint-btn { background-color: #f1c40f; border: none; border-radius: 15px; font-size: 1.8vw; font-weight: bold; color: #5a4a42; padding: 1% 3%; cursor: pointer; box-shadow: 0 6px 0 #f39c12; display: flex; align-items: center; gap: 10px; }
+        .hint-btn:active { transform: translateY(6px); box-shadow: none; }
+        .answer-zone { width: 100%; min-height: 15%; background-color: #fff; border: 4px dashed #f39c12; border-radius: 20px; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 1vw; padding: 2%; margin-bottom: 3%; box-shadow: inset 0 4px 8px rgba(0,0,0,0.05); }
+        .pool-zone { width: 100%; flex-grow: 1; background-color: #fff; border: 4px solid #f39c12; border-radius: 20px; display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: center; gap: 1.5vw; padding: 3%; box-shadow: 0 8px 16px rgba(0,0,0,0.05); }
+        .word-wrapper { display: flex; align-items: stretch; gap: 0.5vw; animation: popIn 0.3s ease; }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .speak-btn { background-color: #fde3a7; border: none; border-radius: 10px; font-size: 1.5vw; padding: 0 1vw; cursor: pointer; box-shadow: 0 4px 0 #f39c12; transition: 0.1s; }
+        .speak-btn:active { transform: translateY(4px); box-shadow: none; }
+        .word-btn { background-color: #3498db; color: white; font-size: 2.5vw; font-weight: bold; font-family: inherit; border: none; border-radius: 15px; padding: 1.5vw 2.5vw; cursor: pointer; box-shadow: 0 6px 0 #2980b9; transition: all 0.1s ease; }
+        .word-btn:active { transform: translateY(6px); box-shadow: none; }
+        .answer-zone .word-btn { background-color: #2ecc71; box-shadow: 0 6px 0 #27ae60; }
+        .answer-zone .speak-btn { background-color: #a8e6cf; box-shadow: 0 4px 0 #27ae60; }
+        .shake { animation: shake 0.4s; }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
+        .status-area { width: 100%; height: 8%; margin-top: 2%; display: flex; justify-content: center; align-items: center; gap: 3vw; }
+        #message { font-size: 2.5vw; font-weight: bold; margin: 0; color: #e74c3c; }
+        #next-btn { font-size: 2vw; padding: 1% 3%; background-color: #e74c3c; color: white; border: none; border-radius: 50px; cursor: pointer; display: none; box-shadow: 0 6px 0 #c0392b; font-weight: bold; transition: 0.2s; }
+        #next-btn:active { transform: translateY(6px); box-shadow: none; }
+        @media (min-width: 1400px) { h1 { font-size: 36px; } .back-btn { font-size: 20px; } .hint-btn { font-size: 24px; } .word-btn { font-size: 36px; padding: 15px 25px; } .speak-btn { font-size: 24px; padding: 0 15px; } #message { font-size: 36px; } #next-btn { font-size: 28px; } }
+    </style>
+</head>
+<body>
+    <div class="canvas-16-9">
+        <div class="header-area">
+            <h1>🚂 第四關：句子排排站</h1>
+            <a href="#" id="back-btn" class="back-btn" onclick="stopSpeech()">🏠 回課程大廳</a>
+        </div>
+        <div class="hint-area">
+            <button class="hint-btn" onclick="playFullSentence()" title="聽完整句子">🔊 聽聽看完整句子 (提示)</button>
+        </div>
+        <div class="answer-zone" id="answer-zone"></div>
+        <div class="pool-zone" id="pool-zone"></div>
+        <div class="status-area">
+            <div id="message"></div>
+            <button id="next-btn" onclick="nextQuestion()">下一題 ➡️</button>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const lessonId = urlParams.get('id') || "2"; 
+        document.getElementById('back-btn').href = `lesson.html?id=${lessonId}`;
+        const questionsData = allLessonsData[lessonId] ? allLessonsData[lessonId].level4 : [];
+
+        let currentIdx = 0, correctParts = [], poolParts = [], answerParts = [], isWaiting = false;
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let spokenText = text.replace("長的", "掌的");
+                const utterance = new SpeechSynthesisUtterance(spokenText);
+                utterance.lang = 'zh-TW'; utterance.rate = 0.85; window.speechSynthesis.speak(utterance);
+            }
+        }
+        function stopSpeech() { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }
+        function playFullSentence() { speakText(correctParts.join("")); }
+
+        function shuffle(array) {
+            let arr = [...array], curr = arr.length, rand;
+            while (curr !== 0) { rand = Math.floor(Math.random() * curr); curr--; [arr[curr], arr[rand]] = [arr[rand], arr[curr]]; }
+            if (arr.join("") === array.join("") && arr.length > 1) return shuffle(array);
+            return arr;
+        }
+
+        function loadQuestion() {
+            if (currentIdx >= questionsData.length) {
+                document.getElementById('pool-zone').innerHTML = ""; document.getElementById('answer-zone').innerHTML = "";
+                document.querySelector('.hint-btn').style.display = "none"; document.getElementById('message').style.color = "#2ecc71";
+                document.getElementById('message').innerText = "🎉 恭喜！本關卡挑戰成功！"; 
+                
+                let btn = document.getElementById('next-btn');
+                btn.innerText = '🏠 回課程大廳'; btn.style.display = 'inline-block';
+                btn.onclick = () => { window.location.href = `lesson.html?id=${lessonId}`; };
+                speakText("恭喜！所有的句子都排完了！"); return;
+            }
+            isWaiting = false; document.getElementById('message').innerText = ""; 
+            
+            let btn = document.getElementById('next-btn');
+            btn.style.display = 'none'; btn.innerText = '下一題 ➡️'; btn.onclick = nextQuestion;
+
+            correctParts = questionsData[currentIdx].split(" "); poolParts = shuffle(correctParts); answerParts = [];
+            renderZones();
+        }
+
+        function renderZones() {
+            const pZone = document.getElementById('pool-zone'), aZone = document.getElementById('answer-zone');
+            pZone.innerHTML = ""; aZone.innerHTML = "";
+            answerParts.forEach((part, idx) => aZone.appendChild(createWordBlock(part, () => moveToPool(idx))));
+            poolParts.forEach((part, idx) => pZone.appendChild(createWordBlock(part, () => moveToAnswer(idx))));
+            if (poolParts.length === 0 && answerParts.length > 0) checkAnswer();
+        }
+
+        function createWordBlock(text, clickHandler) {
+            const wrap = document.createElement('div'); wrap.className = 'word-wrapper';
+            const sBtn = document.createElement('button'); sBtn.className = 'speak-btn'; sBtn.innerText = '🔊'; sBtn.onclick = (e) => { e.stopPropagation(); speakText(text); };
+            const wBtn = document.createElement('button'); wBtn.className = 'word-btn'; wBtn.innerText = text; wBtn.onclick = () => { speakText(text); clickHandler(); };
+            wrap.appendChild(sBtn); wrap.appendChild(wBtn); return wrap;
+        }
+
+        function moveToAnswer(idx) { if (isWaiting) return; answerParts.push(poolParts.splice(idx, 1)[0]); renderZones(); }
+        function moveToPool(idx) { if (isWaiting) return; poolParts.push(answerParts.splice(idx, 1)[0]); renderZones(); }
+
+        function checkAnswer() {
+            if (answerParts.join("") === correctParts.join("")) {
+                isWaiting = true; document.getElementById('message').style.color = "#2ecc71"; document.getElementById('message').innerText = "🌟 排列正確！好厲害！";
+                document.getElementById('next-btn').style.display = 'inline-block'; speakText("排列正確！好厲害！");
+            } else {
+                document.getElementById('message').style.color = "#e74c3c"; document.getElementById('message').innerText = "順序怪怪的喔，請點擊上面的字退回來修改！";
+                const aZone = document.getElementById('answer-zone'); aZone.classList.add('shake');
+                setTimeout(() => aZone.classList.remove('shake'), 400); speakText("順序怪怪的喔，請點擊上面的字退回來修改！");
+            }
+        }
+
+        function nextQuestion() { stopSpeech(); currentIdx++; loadQuestion(); }
+        window.onunload = stopSpeech; 
+        window.onload = () => { if(questionsData.length===0) alert("無此關卡資料"); else loadQuestion(); };
+    </script>
+</body>
+</html>
