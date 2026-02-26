@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第二關：看圖選好字</title>
+    <title>第二關：看圖選好字 (語音加強版)</title>
     <script src="data.js"></script>
     <style>
         body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; background-color: #eef2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -13,9 +13,9 @@
         .back-btn { background-color: #fff; color: #5a4a42; text-decoration: none; font-size: 1.5vw; font-weight: bold; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.2s; }
         .back-btn:hover { background-color: #f0f0f0; transform: scale(1.05); }
         .game-container { width: 100%; flex-grow: 1; background-color: #ffffff; border-radius: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.05); padding: 2% 4%; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
-        .image-box { width: 40%; height: 35vh; background-color: #f9f9f9; border: 4px dashed #bdc3c7; border-radius: 20px; display: flex; justify-content: center; align-items: center; margin-bottom: 2%; overflow: hidden; font-size: 8vw; }
+        .image-box { width: 40%; height: 35vh; background-color: #f9f9f9; border: 4px dashed #bdc3c7; border-radius: 20px; display: flex; justify-content: center; align-items: center; margin-bottom: 2%; overflow: hidden; font-size: 8vw; cursor: pointer; }
         .image-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .question-text { font-size: 4vw; font-weight: bold; color: #34495e; margin-bottom: 2%; letter-spacing: 5px; }
+        .question-text { font-size: 4vw; font-weight: bold; color: #34495e; margin-bottom: 2%; letter-spacing: 5px; cursor: pointer; }
         .blank-spot { display: inline-block; min-width: 5vw; height: 5vw; border-bottom: 6px solid #e74c3c; color: #e74c3c; text-align: center; line-height: 5vw; margin: 0 1vw; padding: 0 1vw; transition: all 0.3s ease; }
         .correct-fill { border-bottom: 6px solid transparent; color: #2ecc71; transform: scale(1.2); }
         .options-container { display: flex; justify-content: center; gap: 2vw; flex-wrap: wrap; width: 100%; }
@@ -37,8 +37,8 @@
             <a href="#" id="back-btn" class="back-btn">🏠 回課程大廳</a>
         </div>
         <div class="game-container">
-            <div class="image-box" id="image-display"></div>
-            <div class="question-text" id="question-display"></div>
+            <div class="image-box" id="image-display" onclick="speakQuestion()"></div>
+            <div class="question-text" id="question-display" onclick="speakQuestion()"></div>
             <div class="options-container" id="options-display"></div>
         </div>
         <div class="status-area">
@@ -55,9 +55,28 @@
 
         let currentIdx = 0, isWaiting = false;
 
+        // 🔊 語音函式
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-TW';
+            utterance.rate = 0.8;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // 唸出題目
+        function speakQuestion() {
+            const q = questions[currentIdx];
+            if (!q) return;
+            // 如果還沒答對，把「？」唸成「什麼」
+            const blankText = isWaiting ? q.correct : "什麼";
+            speak(`${q.prefix}${blankText}${q.suffix}`);
+        }
+
         function loadQuestion() {
             if (currentIdx >= questions.length) {
                 document.querySelector('.game-container').innerHTML = "<h2 style='font-size: 3vw; color: #2ecc71;'>🎉 太棒了！本關卡挑戰成功！</h2>";
+                speak("恭喜你挑戰成功！");
                 document.getElementById('feedback-msg').innerText = ""; 
                 let btn = document.getElementById('next-btn');
                 btn.innerText = '🏠 回課程大廳'; btn.style.display = 'inline-block';
@@ -75,25 +94,46 @@
 
             document.getElementById('question-display').innerHTML = `${q.prefix}<span class="blank-spot" id="blank">？</span>${q.suffix}`;
 
+            // 自動唸題目
+            speakQuestion();
+
             const optBox = document.getElementById('options-display'); optBox.innerHTML = "";
             let shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
             shuffledOptions.forEach(opt => {
                 const b = document.createElement('button'); b.className = 'option-btn'; b.innerText = opt;
-                b.onclick = () => checkAnswer(b, opt, q.correct); optBox.appendChild(b);
+                b.onclick = () => {
+                    speak(opt); // 點擊選項時先唸出那個字
+                    checkAnswer(b, opt, q.correct);
+                };
+                optBox.appendChild(b);
             });
         }
 
         function checkAnswer(btn, selectedWord, correctWord) {
             if (isWaiting) return;
+            const q = questions[currentIdx];
             if (selectedWord === correctWord) {
                 isWaiting = true;
                 const blank = document.getElementById('blank'); blank.innerText = correctWord; blank.classList.add('correct-fill');
-                document.querySelectorAll('.option-btn').forEach(b => { if (b.innerText === correctWord) { b.style.backgroundColor = "#2ecc71"; b.style.boxShadow = "0 6px 0 #27ae60"; } else { b.style.opacity = "0.3"; } });
+                document.querySelectorAll('.option-btn').forEach(b => { 
+                    if (b.innerText === correctWord) { 
+                        b.style.backgroundColor = "#2ecc71"; b.style.boxShadow = "0 6px 0 #27ae60"; 
+                    } else { 
+                        b.style.opacity = "0.3"; 
+                    } 
+                });
                 document.getElementById('feedback-msg').style.color = "#2ecc71"; document.getElementById('feedback-msg').innerText = "🌟 答對了！";
+                
+                // 🔊 答對語音回饋：唸出「答對了，(完整詞語)」
+                setTimeout(() => {
+                    speak(`答對了！ ${q.prefix}${q.correct}${q.suffix}`);
+                }, 500);
+                
                 document.getElementById('next-btn').style.display = 'inline-block';
             } else {
                 btn.classList.add('wrong'); btn.disabled = true;
                 document.getElementById('feedback-msg').style.color = "#e74c3c"; document.getElementById('feedback-msg').innerText = "再試試看喔！💪";
+                speak("不對喔，再試試看");
                 setTimeout(() => btn.classList.remove('wrong'), 400);
             }
         }
