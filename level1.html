@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>第一關：部件拼拼樂 (高對比深色版)</title>
+    <title>第一關：部件拼拼樂 (語音增強版)</title>
     <script src="data.js"></script>
     <style>
         /* 🌙 視障友善：深色背景 */
@@ -21,8 +21,9 @@
         .back-btn { background-color: #333333; color: #ffffff; text-decoration: none; font-size: 18px; font-weight: bold; padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.5); transition: 0.2s; border: 1px solid #555; z-index: 50; }
         .back-btn:hover { background-color: #555555; transform: scale(1.05); }
         
-        /* 🌙 提示區改為深色高對比 */
-        .target-hint { font-size: 24px; color: #ffffff; background: #222222; padding: 8px 30px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.5); display: inline-block; margin-bottom: 3%; border: 1px solid #444; }
+        /* 🌙 提示區改為深色高對比，新增手勢指標 */
+        .target-hint { font-size: 24px; color: #ffffff; background: #222222; padding: 8px 30px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.5); display: inline-block; margin-bottom: 3%; border: 1px solid #444; cursor: pointer; transition: 0.2s; }
+        .target-hint:hover { background: #333; border-color: #ff9800; }
         #target-word { color: #ff9800; font-weight: bold; } /* 目標字改為亮橘色 */
         
         .game-wrapper { display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 3vw; width: 100%; flex-grow: 1; }
@@ -61,7 +62,8 @@
             <h1>🧩 第一關：部件拼拼樂</h1>
             <a href="#" id="back-btn" class="back-btn">🏠 回課程大廳</a>
         </div>
-        <div class="target-hint">目標：<span id="target-word">字</span></div>
+        <div class="target-hint" onclick="speakTarget()">目標：<span id="target-word">字</span> 🔊</div>
+        
         <div class="game-wrapper">
             <div class="box parts-pool" id="pool"><div class="box-title pool-title">1️⃣ 點住並拖曳</div></div>
             <div class="box drop-zone" id="zone"><div class="box-title zone-title">2️⃣ 放到這裡組裝</div><p id="zone-guide">把部件丟進來</p></div>
@@ -77,6 +79,21 @@
 
         let gameWords = [], currentIdx = 0, placedCount = 0;
         let activePart = null, offsetX = 0, offsetY = 0;
+
+        // 🔊 語音發音函式
+        function speak(text) {
+            window.speechSynthesis.cancel(); // 停止先前的聲音
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-TW';
+            utterance.rate = 0.7; // 稍微慢一點點
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // 點擊標題重複讀音
+        function speakTarget() {
+            const word = document.getElementById('target-word').innerText;
+            if(word && word !== "字") speak(word);
+        }
 
         function shuffle(array) {
             let currentIndex = array.length, randomIndex;
@@ -96,7 +113,13 @@
             document.querySelectorAll('.part-img').forEach(img => img.remove());
             msg.innerText = ''; nextBtn.style.display = 'none'; nextBtn.innerText = '我拼好了 ➡️'; nextBtn.onclick = nextWord;
             placedCount = 0; guide.style.display = 'block';
-            let data = gameWords[currentIdx]; targetWord.innerText = data.word;
+            
+            let data = gameWords[currentIdx]; 
+            targetWord.innerText = data.word;
+
+            // ✨ 自動發音：開始新的一題
+            speak(data.word);
+
             let shuffledParts = [...data.parts].sort(() => Math.random() - 0.5);
             
             shuffledParts.forEach((src) => {
@@ -192,7 +215,15 @@
             activePart = null;
         }
         
-        function checkWin() { if (placedCount === gameWords[currentIdx].parts.length) { document.getElementById('message').innerText = "🌟 請檢查拼得對不對喔！ 🌟"; document.getElementById('next-btn').style.display = 'inline-block'; } }
+        function checkWin() { 
+            if (placedCount === gameWords[currentIdx].parts.length) { 
+                document.getElementById('message').innerText = "🌟 請檢查拼得對不對喔！ 🌟"; 
+                document.getElementById('next-btn').style.display = 'inline-block'; 
+                
+                // ✨ 拼完後語音提醒
+                speak("拼好了，請檢查看看。");
+            } 
+        }
         
         function nextWord() { 
             currentIdx++; 
@@ -201,6 +232,7 @@
             } else { 
                 document.getElementById('message').style.color = "#4CAF50";
                 document.getElementById('message').innerText = "🎉 恭喜！本關卡挑戰成功！"; 
+                speak("恭喜你，挑戰成功！");
                 let btn = document.getElementById('next-btn');
                 btn.innerText = '🏠 回課程大廳';
                 btn.onclick = () => { window.location.href = `lesson.html?id=${lessonId}`; };
