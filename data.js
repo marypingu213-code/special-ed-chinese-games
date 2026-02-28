@@ -177,7 +177,7 @@ const allLessonsData = {
         level1: [
             { word: "畔", parts: ["images/L5/筆順-畔-部件-1.png", "images/L5/筆順-畔-部件-2.png"], pos: [{x: -25, y: 39, scale: 0.35}, {x: 39, y: -89, scale: 0.4}] }, // 修改了部件1比例 從0.45變0.35
             { word: "巒", parts: ["images/L5/筆順-巒-部件-1.png", "images/L5/筆順-巒-部件-2.png"], pos: [{x: -95, y: -32, scale: 0.35}, {x: -21, y: 128, scale: 0.4}] },
-            { word: "鰭", parts: ["images/L5/筆順-鰭-部件-1.png", "images/L5/筆順-鰭-部件-2.png", "images/L5/筆順-鰭-部件-3.png"], pos: [{x: -42, y: -75, scale: 0.45}, {x: 52, y: -56, scale: 0.3}, {x: 103, y: 110, scale: 0.45}] }, // 修改了部件2和3比例：部件2從0.4變0.3，部件3從0.55變0.45
+            { word: "鰭", parts: ["images/L5/筆順-鰭-部件-1.png", "images/L5/筆順-鰭-部件-2.png", "images/L5/筆順-鰭-部件-3.png"], pos: [{x: -42, y: -75, scale: 0.45}, {x: 52, y: -56, scale: 0.2}, {x: 103, y: 110, scale: 0.3}] }, // 修改了部件2和3比例：部件2從0.4變0.3，部件3從0.55變0.45
             { word: "韌", parts: ["images/L5/筆順-韌-部件-1.png", "images/L5/筆順-韌-部件-2.png"], pos: [{x: -41, y: -112, scale: 0.35}, {x: 44, y: -18, scale: 0.4}] },
             { word: "鞭", parts: ["images/L5/筆順-鞭-部件-1.png", "images/L5/筆順-鞭-部件-2.png"], pos: [{x: -65, y: -81, scale: 0.4}, {x: 4, y: -45, scale: 0.4}] },
             { word: "蒼", parts: ["images/L5/筆順-蒼-部件-1.png", "images/L5/筆順-蒼-部件-2.png"], pos: [{x: -49, y: 10, scale: 0.55}, {x: -110, y: -11, scale: 0.4}] },
