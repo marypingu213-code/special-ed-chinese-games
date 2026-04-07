@@ -166,104 +166,16 @@ const allLessonsData = {
             "有人投注 畢生精力，追求一個 遠大的目標。",
             "動畫成了 華特改變 人生的契機。",
             "每個人都會 跌倒，重新站起來 是繼續前行的方式。",
-            "夢想不一定 會偉大，但它會在遠方 激勵我們。",
+            "夢夢不一定 會偉大，但它會在遠方 激勵我們。",
             "找到適合的 學習楷模，也能幫助我們 掌握要領。"
         ]
     },
 
     // ================= 第五課 =================
     "5": {
-        title: "第五課：蒂列娜",
+        title: "第五課：蒂烈娜",
         level1: [
             { word: "畔", parts: ["images/L5/筆順-畔-部件-1.png", "images/L5/筆順-畔-部件-2.png"], pos: [{x: 90, y: 180, scale: 0.6}, {x: 160, y: 180}] },
             { word: "巒", parts: ["images/L5/筆順-巒-部件-1.png", "images/L5/筆順-巒-部件-2.png"], pos: [{x: 120, y: 130, scale: 0.7}, {x: 120, y: 200, scale: 0.9}] },
             { word: "鰭", parts: ["images/L5/筆順-鰭-部件-1.png", "images/L5/筆順-鰭-部件-2.png", "images/L5/筆順-鰭-部件-3.png"], pos: [{x: 70, y: 180, scale: 0.9}, {x: 160, y: 130, scale: 0.6}, {x: 160, y: 210, scale: 0.6}] }, 
-            { word: "韌", parts: ["images/L5/筆順-韌-部件-1.png", "images/L5/筆順-韌-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "鞭", parts: ["images/L5/筆順-鞭-部件-1.png", "images/L5/筆順-鞭-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "蒼", parts: ["images/L5/筆順-蒼-部件-1.png", "images/L5/筆順-蒼-部件-2.png"], pos: [{x: 120, y: 130, scale: 0.8}, {x: 120, y: 200, scale: 0.9}] },
-            { word: "恰", parts: ["images/L5/筆順-恰-部件-1.png", "images/L5/筆順-恰-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "倚", parts: ["images/L5/筆順-倚-部件-1.png", "images/L5/筆順-倚-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "胖", parts: ["images/L5/筆順-胖-部件-1.png", "images/L5/筆順-胖-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "搶", parts: ["images/L5/筆順-搶-部件-1.png", "images/L5/筆順-搶-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "頸", parts: ["images/L5/筆順-頸-部件-1.png", "images/L5/筆順-頸-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "勁", parts: ["images/L5/筆順-勁-部件-1.png", "images/L5/筆順-勁-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "洶", parts: ["images/L5/筆順-洶-部件-1.png", "images/L5/筆順-洶-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "湧", parts: ["images/L5/筆順-湧-部件-1.png", "images/L5/筆順-湧-部件-2.png"], pos: [{x: 90, y: 180}, {x: 160, y: 180}] },
-            { word: "湍", parts: ["images/L5/筆順-湍-部件-1.png", "images/L5/筆順-湍-部件-2.png", "images/L5/筆順-湍-部件-3.png"], pos: [{x: 70, y: 180, scale: 0.8}, {x: 120, y: 180, scale: 0.8}, {x: 170, y: 180, scale: 0.8}] },
-            { word: "猛", parts: ["images/L5/筆順-猛-部件-1.png", "images/L5/筆順-猛-部件-2.png", "images/L5/筆順-猛-部件-3.png"], pos: [{x: 80, y: 180, scale: 0.9}, {x: 150, y: 130, scale: 0.6}, {x: 150, y: 210, scale: 0.6}] },
-            { word: "濺", parts: ["images/L5/筆順-濺-部件-1.png", "images/L5/筆順-濺-部件-2.png", "images/L5/筆順-濺-部件-3.png"], pos: [{x: 70, y: 180, scale: 0.8}, {x: 120, y: 180, scale: 0.8}, {x: 170, y: 180, scale: 0.8}] }
-        ],
-        level2: [
-            { prefix: "河", suffix: "", correct: "畔", options: ["畔", "伴", "半"], image: "", emoji: "🏞️" },
-            { prefix: "秘", suffix: "", correct: "密", options: ["密", "蜜", "山"], image: "", emoji: "🤫" },
-            { prefix: "呼", suffix: "", correct: "吸", options: ["吸", "及", "圾"], image: "", emoji: "🫁" },
-            { prefix: "尾", suffix: "", correct: "鰭", options: ["鰭", "嗜", "老"], image: "", emoji: "🐟" },
-            { prefix: "堅", suffix: "", correct: "韌", options: ["韌", "刃", "忍"], image: "", emoji: "💪" },
-            { prefix: "", suffix: "子", correct: "鞭", options: ["鞭", "便", "扁"], image: "", emoji: "🦯" },
-            { prefix: "強", suffix: "", correct: "勁", options: ["勁", "徑", "近"], image: "", emoji: "💨" },
-            { prefix: "銀", suffix: "", correct: "河", options: ["河", "和", "何"], image: "", emoji: "🌌" },
-            { prefix: "兇", suffix: "", correct: "猛", options: ["猛", "孟", "蜢"], image: "", emoji: "🐅" }
-        ],
-        level3: [
-            { question: "1. 在這一課出現的是什麼種類的魚？", options: ["鯨魚", "鯝魚", "美人魚", "鯊魚"], correct: "鯝魚" },
-            { question: "2. 不偏不倚適合用在哪個情境？", options: ["籃球正好打中教練的頭", "同學考試考了一百分", "老師請班長帶隊去健康中心", "跑大隊接力得到第一名"], correct: "籃球正好打中教練的頭" },
-            { question: "3. 蒂烈娜經歷過許多次的失敗，她的心情如何？", options: ["興高采烈", "歡天喜地", "垂頭喪氣", "手舞足蹈"], correct: "垂頭喪氣" },
-            { question: "4. 蒂烈娜為什麼覺得自己是失敗者？", options: ["她沒辦法越過激流", "她考試考很爛", "她投球都投不進", "她忘記帶作業"], correct: "她沒辦法越過激流" },
-            { question: "5. 以下何者會用兇猛形容？", options: ["校狗拉拉", "可愛阿白", "侏儸紀恐龍", "水溝裡的老鼠"], correct: "侏儸紀恐龍" }
-        ],
-       level4: [
-            "她發現 昨晚的 小星星 都不見了",
-            "高大的杉木 像是 一枝枝 黝黑的筆",
-            "火花 由遠至近 由大至小",
-            "胖胖的 小星星 脫下 自己的 披風",
-            "遠看 就像在 銀河 衝浪 一樣 漂亮"
-        ]
-    },
-
-    // ================= 第六課 =================
-    "6": {
-        title: "第六課：不怕",
-        level1: [
-            // 🌟 第六課生字全數匯入 (預設標準排列)
-            { word: "居", parts: ["images/L6/筆順-居-部件-1.png", "images/L6/筆順-居-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "孩", parts: ["images/L6/筆順-孩-部件-1.png", "images/L6/筆順-孩-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "常", parts: ["images/L6/筆順-常-部件-1.png", "images/L6/筆順-常-部件-2.png", "images/L6/筆順-常-部件-3.png"], pos: [{x: 70, y: 180}, {x: 120, y: 180}, {x: 170, y: 180}] },
-            { word: "躲", parts: ["images/L6/筆順-躲-部件-1.png", "images/L6/筆順-躲-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "發", parts: ["images/L6/筆順-發-部件-1.png", "images/L6/筆順-發-部件-2.png", "images/L6/筆順-發-部件-3.png"], pos: [{x: 70, y: 180}, {x: 120, y: 180}, {x: 170, y: 180}] },
-            { word: "現", parts: ["images/L6/筆順-現-部件-1.png", "images/L6/筆順-現-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "就", parts: ["images/L6/筆順-就-部件-1.png", "images/L6/筆順-就-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "頭", parts: ["images/L6/筆順-頭-部件-1.png", "images/L6/筆順-頭-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "回", parts: ["images/L6/筆順-回-部件-1.png", "images/L6/筆順-回-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "想", parts: ["images/L6/筆順-想-部件-1.png", "images/L6/筆順-想-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "但", parts: ["images/L6/筆順-但-部件-1.png", "images/L6/筆順-但-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "怎", parts: ["images/L6/筆順-怎-部件-1.png", "images/L6/筆順-怎-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "知", parts: ["images/L6/筆順-知-部件-1.png", "images/L6/筆順-知-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "道", parts: ["images/L6/筆順-道-部件-1.png", "images/L6/筆順-道-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "先", parts: ["images/L6/筆順-先-部件-1.png", "images/L6/筆順-先-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "鄰", parts: ["images/L6/筆順-鄰-部件-1.png", "images/L6/筆順-鄰-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] },
-            { word: "縮", parts: ["images/L6/筆順-縮-部件-1.png", "images/L6/筆順-縮-部件-2.png", "images/L6/筆順-縮-部件-3.png", "images/L6/筆順-縮-部件-4.png"], pos: [{x: 90, y: 130}, {x: 150, y: 130}, {x: 90, y: 180}, {x: 150, y: 180}] },
-            { word: "讓", parts: ["images/L6/筆順-讓-部件-1.png", "images/L6/筆順-讓-部件-2.png"], pos: [{x: 100, y: 180}, {x: 170, y: 180}] }
-        ],
-        level2: [],
-        level3: [],
-        level4: []
-    },
-
-    // ================= 第七課 =================
-    "7": { title: "第七課：打開心中的窗", level1: [], level2: [], level3: [], level4: [] },
-
-    // ================= 第八課 =================
-    "8": { title: "第八課：努力愛春華", level1: [], level2: [], level3: [], level4: [] },
-
-    // ================= 第九課 =================
-    "9": { title: "第九課：每一個孩子都有一條自己的路", level1: [], level2: [], level3: [], level4: [] }
-}, // <--- 這裡記得補一個逗號
-    const allLessonsData = {
-    // ... 你原本的其他課次 ...
-    
-    "grade6_midterm": {
-        "title": "六年級期中挑戰賽 🏆",
-        "customUrl": "grade6_midterm.html"  // 這是指向我們剛剛做好的那個檔案
-    }
-};
-};
+            { word: "韌", parts: ["images/L5/筆順-韌-部件-1.png", "images/L5/筆順-韌-部件-2.png"], pos: [{x: 90, y
